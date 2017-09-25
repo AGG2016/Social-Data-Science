@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+
+
+<title>Order Statistics</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/lumen.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/font-awesome-4.5.0/css/font-awesome.min.css" rel="stylesheet" />
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; background-color: #f8f8f8; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+pre, code { background-color: #f8f8f8; }
+code > span.kw { color: #204a87; font-weight: bold; } /* Keyword */
+code > span.dt { color: #204a87; } /* DataType */
+code > span.dv { color: #0000cf; } /* DecVal */
+code > span.bn { color: #0000cf; } /* BaseN */
+code > span.fl { color: #0000cf; } /* Float */
+code > span.ch { color: #4e9a06; } /* Char */
+code > span.st { color: #4e9a06; } /* String */
+code > span.co { color: #8f5902; font-style: italic; } /* Comment */
+code > span.ot { color: #8f5902; } /* Other */
+code > span.al { color: #ef2929; } /* Alert */
+code > span.fu { color: #000000; } /* Function */
+code > span.er { color: #a40000; font-weight: bold; } /* Error */
+code > span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #000000; } /* Constant */
+code > span.sc { color: #000000; } /* SpecialChar */
+code > span.vs { color: #4e9a06; } /* VerbatimString */
+code > span.ss { color: #4e9a06; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #000000; } /* Variable */
+code > span.cf { color: #204a87; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #ce5c00; font-weight: bold; } /* Operator */
+code > span.pp { color: #8f5902; font-style: italic; } /* Preprocessor */
+code > span.ex { } /* Extension */
+code > span.at { color: #c4a000; } /* Attribute */
+code > span.do { color: #8f5902; font-weight: bold; font-style: italic; } /* Documentation */
+code > span.an { color: #8f5902; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #8f5902; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #8f5902; font-weight: bold; font-style: italic; } /* Information */
+</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+<link rel="stylesheet" href="styles2.css" type="text/css" />
+
+</head>
+
+<body>
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 54px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 59px;
+  margin-top: -59px;
+}
+
+.section h2 {
+  padding-top: 59px;
+  margin-top: -59px;
+}
+.section h3 {
+  padding-top: 59px;
+  margin-top: -59px;
+}
+.section h4 {
+  padding-top: 59px;
+  margin-top: -59px;
+}
+.section h5 {
+  padding-top: 59px;
+  margin-top: -59px;
+}
+.section h6 {
+  padding-top: 59px;
+  margin-top: -59px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+
+<div class="container-fluid main-container">
+
+<!-- tabsets -->
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+</script>
+
+<!-- code folding -->
+
+
+
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = false;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+  padding-left: 25px;
+  text-indent: 0;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html"><img src="pics/SDS2-02-1.png" width= 25/></a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">About</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Exploration
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li class="dropdown-header">Basic Concepts</li>
+    <li>
+      <a href="variables.html">Variables</a>
+    </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Basic Visual Tools</li>
+    <li>
+      <a href="ge.html">Histograms</a>
+    </li>
+    <li>
+      <a href="histDetails.html">Details</a>
+    </li>
+    <li class="divider"></li>
+    <li>
+      <a href="central_tendency.html">Central Tendency</a>
+    </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">More Visual Tools</li>
+    <li>
+      <a href="orderstats.html">Order Statistics</a>
+    </li>
+    <li class="divider"></li>
+    <li>
+      <a href="variability.html">Variability</a>
+    </li>
+    <li class="divider"></li>
+    <li>
+      <a href="correlation.html">Correlation</a>
+    </li>
+    <li class="divider"></li>
+    <li>
+      <a href="spurious.html">Spurious Correlations</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Correlation
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="gec.html">Graphical Exploration</a>
+    </li>
+    <li>
+      <a href="cm.html">Correlation Measurements</a>
+    </li>
+    <li>
+      <a href="lm.html">Linear Regression</a>
+    </li>
+    <li>
+      <a href="pre.html">Prediction</a>
+    </li>
+    <li>
+      <a href="fit.html">Model Fit Assessment</a>
+    </li>
+    <li>
+      <a href="leverage.html">Outliers: Assessment of Influence</a>
+    </li>
+  </ul>
+</li>
+<li>
+  <a href="rosling.html">Hans Rosling</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="https://github.com/AGG2016/Social-Data-Science">
+    <span class="fa fa-github"></span>
+     
+  </a>
+</li>
+<li>
+  <a href="https://co.linkedin.com/in/an%C3%ADbal-granada-gonz%C3%A1lez-86730a24">
+    <span class="fa fa-linkedin"></span>
+     
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">Order Statistics</h1>
+
+</div>
+
+
+<hr />
+<hr />
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(<span class="dt">data=</span>murders, <span class="kw">aes</span>((murders$Population/<span class="dv">1000000</span>))) +<span class="st"> </span>
+<span class="st">  </span><span class="kw">geom_histogram</span>(<span class="kw">aes</span>(<span class="dt">fill=</span>..count..),<span class="dt">alpha=</span><span class="fl">0.5</span>,<span class="dt">col=</span><span class="st">&quot;red&quot;</span>) +
+<span class="st">  </span><span class="kw">scale_fill_gradient</span>(<span class="st">&quot;Count&quot;</span>, <span class="dt">low =</span> <span class="st">&quot;white&quot;</span>, <span class="dt">high =</span> <span class="st">&quot;red&quot;</span>) +
+<span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">breaks=</span><span class="kw">seq</span>(<span class="dv">0</span>,<span class="dv">50</span>,<span class="dv">5</span>))</code></pre></div>
+<pre><code>## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</code></pre>
+<p><img src="orderstats_files/figure-html/plot11-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><strong>Hypothesis</strong>: the histogram of murders by gun appears to overlap the population histogram almost entirely; this would suggest a very strong correlation between the amount of inhabitants and the incidence of the type of violence studied. A natural per capita rate of violent homicides? Not very inspiring…</p>
+<p>For starting, the outlier in the gun murders data series is also an outlier in terms of population (California). Perhaps it is time to sophisticate our resources aimed to analyse data distributions, sample acummulation, outliers…</p>
+<hr />
+<div id="boxplots--box-whiskers-" class="section level3">
+<h3>Boxplots -Box &amp; Whiskers-</h3>
+<hr />
+<div id="percentiles" class="section level4">
+<h4><strong>Percentiles</strong></h4>
+<p>The sample <strong>median</strong> is just a particular case of a more general measurement: the <strong>percentile</strong>.</p>
+<p>While the <strong>median</strong> splits the sample in half, each grouping 50% of the data, the <strong>X% percentile</strong> is higher than X% of the data. For instance, the <strong>25% percentile</strong> corresponds to the observation that is higher than 25% of the data. If we are dealing with a data series of students’ heights, in a hundred students sample, the 25% percentile is simply the height a student should have in order to be taller than 25 collegues.</p>
+<p><strong>Quartiles</strong> are conspicuous cases of percentiles:</p>
+<ul>
+<li><p>The <strong>1st quartile</strong> -<strong>Q1</strong>- is higher than 25% of the sample and lower than the 75%.</p></li>
+<li><p>The <strong>2nd quartile</strong> -<strong>Q2</strong>- is the <strong>median</strong>.</p></li>
+<li><p>The <strong>3th quartile</strong> -<strong>Q3</strong> is higher than 75% of the sample and lower than the 25%.</p></li>
+</ul>
+<hr />
+<center>
+<img src="pics/boxplots.png" align="middle" style="width: 600px;"/>
+</center>
+<hr />
+<p>The <strong>whiskers</strong> mark the beginning of the outliers regions.</p>
+<hr />
+</div>
+</div>
+<div id="boxplots-an-example" class="section level3">
+<h3>Boxplots: an example</h3>
+<hr />
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(ggthemes)
+<span class="kw">ggplot</span>(<span class="dt">data=</span>murders, <span class="kw">aes</span>(<span class="dt">x=</span><span class="st">&quot;murders$Population&quot;</span>,<span class="dt">y=</span>(murders$Population/<span class="dv">1000000</span>))) +
+<span class="st">  </span><span class="kw">geom_boxplot</span>(<span class="dt">colour=</span><span class="st">&quot;blue&quot;</span>,<span class="dt">fill=</span><span class="st">&quot;blue&quot;</span>,<span class="dt">alpha=</span><span class="fl">0.5</span>) +
+<span class="st">  </span><span class="kw">coord_flip</span>() +
+<span class="st">  </span><span class="kw">theme_fivethirtyeight</span>()</code></pre></div>
+<p><img src="orderstats_files/figure-html/plot12-1.png" width="672" style="display: block; margin: auto;" /></p>
+<div id="interpretation" class="section level4">
+<h4><strong>Interpretation</strong></h4>
+<ul>
+<li><p>Box Plots allow a more precise assessment of the sample dispersion: the wider the box, the more dispersed (very useful when comparing two different samples).</p></li>
+<li><p>They also indicate asymmetries: a visibly wider box above the median correspond to a <strong>positive bias</strong> or, in other terms, to the accumulation of an important amount of the sample (50%) in narrower range of smaller values (then, a <strong>positive bias</strong> marks a peak towards the lowest values).</p></li>
+<li><p><strong>Outliers</strong> are clearly signaled.</p></li>
+</ul>
+<hr />
+</div>
+</div>
+<div id="comparative-boxplots" class="section level3">
+<h3>Comparative Boxplots</h3>
+<hr />
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(classInt)
+intervals=<span class="kw">classIntervals</span>(murders$Population,<span class="dv">4</span>,
+                         <span class="dt">style=</span><span class="st">&quot;quantile&quot;</span>,
+                         <span class="dt">intervalClosure =</span> <span class="st">&quot;left&quot;</span>)
+PopulationGroup=<span class="kw">cut</span>(murders$Population,
+                    <span class="dt">breaks =</span> intervals$brks,
+                    <span class="dt">labels=</span><span class="kw">c</span>(<span class="st">&quot;Small&quot;</span>,<span class="st">&quot;Average -&quot;</span>,<span class="st">&quot;Average +&quot;</span>,<span class="st">&quot;Big&quot;</span>))
+murders&lt;-<span class="kw">cbind</span>(murders,PopulationGroup)
+murders[<span class="dv">51</span>,<span class="dv">9</span>]&lt;-<span class="st">&quot;Small&quot;</span></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(<span class="dt">data=</span>murders, <span class="kw">aes</span>(<span class="dt">x=</span>PopulationGroup,<span class="dt">y=</span>murders$GunMurders)) +
+<span class="st">  </span><span class="kw">geom_boxplot</span>(<span class="dt">colour=</span><span class="st">&quot;black&quot;</span>,<span class="dt">fill=</span><span class="st">&quot;plum&quot;</span>,<span class="dt">alpha=</span><span class="fl">0.8</span>) +
+<span class="st">  </span><span class="kw">coord_flip</span>() +
+<span class="st">  </span><span class="kw">theme_fivethirtyeight</span>() +
+<span class="st">  </span><span class="kw">scale_y_continuous</span>(<span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dv">0</span>,<span class="dv">1300</span>,<span class="dv">200</span>))</code></pre></div>
+<p><img src="orderstats_files/figure-html/plot13-1.png" width="672" style="display: block; margin: auto;" /></p>
+<div id="remarks" class="section level4">
+<h4><strong>Remarks</strong></h4>
+<ul>
+<li><p>Although very simple in design, this is actually a <strong>bivariate analysis</strong> exploring the <strong>correlation</strong> between two variables: does the amount of gun murders increases -in average- when bigger in population are considered? Apparently yes; the plot supports the association.</p></li>
+<li><p>The plot also supports the intuition relating the histograms for population and gun murders; it is clear that bigger states -indeed- a visibly different dynamic of social violence.</p></li>
+<li><p>There is a catch, however: the ideas above are clearly supported by the <strong>central tendency</strong>, the <strong>median</strong> -in this case-, but the variability introduces uncertainty as to the conclusion.</p></li>
+<li><p>In fact, the boxplot is a great to tool to analyze variability; in particular, with the figure above we can gauge at glance the differences in variability between different samples: gun murders are far more volatile in the biggest states, in the sense that some behave like small states but other clearly exhibit an uncommon trend.</p></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(murders,<span class="kw">aes</span>(GunMurders,<span class="dt">color=</span>PopulationGroup,
+                         <span class="dt">fill=</span>PopulationGroup)) +
+<span class="st">  </span><span class="kw">geom_density</span>(<span class="dt">alpha=</span><span class="fl">0.85</span>,<span class="dt">col=</span><span class="st">&quot;black&quot;</span>,<span class="dt">size=</span><span class="fl">0.5</span>) +
+<span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dv">0</span>,<span class="dv">1300</span>,<span class="dv">200</span>))</code></pre></div>
+<p><img src="orderstats_files/figure-html/plot13a-1.png" width="672" style="display: block; margin: auto;" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(<span class="dt">data=</span>murders,<span class="kw">aes</span>(<span class="dt">x=</span>(Population/<span class="dv">1000000</span>),<span class="dt">y=</span>GunMurders,
+                        <span class="dt">group=</span>PopulationGroup,
+                        <span class="dt">colour=</span>PopulationGroup)) +
+<span class="st">  </span><span class="kw">geom_point</span>()</code></pre></div>
+<p><img src="orderstats_files/figure-html/plot14-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>This bivariate analysis offers a very intuitive approach to a <strong>linear regression</strong> (the lower the variability for different levels of the independent variable, the better the <strong>prediction</strong>).</p>
+<hr />
+</div>
+</div>
+
+<!DOCTYPE html>
+<html>
+<body>
+<a href="mailto:anibalgranadagonzalez@gmail.com">Aníbal Granada González</a><br>This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a><br> 
+
+
+<a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png" /></a> <a href="https://tracedseals.starfieldtech.com/siteseal/certsealnew?cdSealType=Seal1&sealId=55e4ye7y7mb73272e786a9cbe99631dey7mb7355e4ye710ed5f2412c0e6333f8&referer=https://dcc.godaddy.com/dcc50/DropinLoad_Default.aspx?controlRequest=ActionCertifiedDomainsAuth&guid=41E0F16A-6A6A-1302-640C-B526B6EF4877"><img src="pics/seal.gif" alt="siteseal" style="width:132px;height:32px;border:0;">
+</a>
+<br />
+</body>
+</html>
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

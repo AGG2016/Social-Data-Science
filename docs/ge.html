@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+
+
+<title>Histograms</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/lumen.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/font-awesome-4.5.0/css/font-awesome.min.css" rel="stylesheet" />
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; background-color: #f8f8f8; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+pre, code { background-color: #f8f8f8; }
+code > span.kw { color: #204a87; font-weight: bold; } /* Keyword */
+code > span.dt { color: #204a87; } /* DataType */
+code > span.dv { color: #0000cf; } /* DecVal */
+code > span.bn { color: #0000cf; } /* BaseN */
+code > span.fl { color: #0000cf; } /* Float */
+code > span.ch { color: #4e9a06; } /* Char */
+code > span.st { color: #4e9a06; } /* String */
+code > span.co { color: #8f5902; font-style: italic; } /* Comment */
+code > span.ot { color: #8f5902; } /* Other */
+code > span.al { color: #ef2929; } /* Alert */
+code > span.fu { color: #000000; } /* Function */
+code > span.er { color: #a40000; font-weight: bold; } /* Error */
+code > span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #000000; } /* Constant */
+code > span.sc { color: #000000; } /* SpecialChar */
+code > span.vs { color: #4e9a06; } /* VerbatimString */
+code > span.ss { color: #4e9a06; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #000000; } /* Variable */
+code > span.cf { color: #204a87; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #ce5c00; font-weight: bold; } /* Operator */
+code > span.pp { color: #8f5902; font-style: italic; } /* Preprocessor */
+code > span.ex { } /* Extension */
+code > span.at { color: #c4a000; } /* Attribute */
+code > span.do { color: #8f5902; font-weight: bold; font-style: italic; } /* Documentation */
+code > span.an { color: #8f5902; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #8f5902; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #8f5902; font-weight: bold; font-style: italic; } /* Information */
+</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+<link rel="stylesheet" href="styles2.css" type="text/css" />
+
+</head>
+
+<body>
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 54px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 59px;
+  margin-top: -59px;
+}
+
+.section h2 {
+  padding-top: 59px;
+  margin-top: -59px;
+}
+.section h3 {
+  padding-top: 59px;
+  margin-top: -59px;
+}
+.section h4 {
+  padding-top: 59px;
+  margin-top: -59px;
+}
+.section h5 {
+  padding-top: 59px;
+  margin-top: -59px;
+}
+.section h6 {
+  padding-top: 59px;
+  margin-top: -59px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+
+<div class="container-fluid main-container">
+
+<!-- tabsets -->
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+</script>
+
+<!-- code folding -->
+
+
+
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3,h4,h5,h6",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = false;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+  padding-left: 25px;
+  text-indent: 0;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html"><img src="pics/SDS2-02-1.png" width= 25/></a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">About</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Exploration
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li class="dropdown-header">Basic Concepts</li>
+    <li>
+      <a href="variables.html">Variables</a>
+    </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Basic Visual Tools</li>
+    <li>
+      <a href="ge.html">Histograms</a>
+    </li>
+    <li>
+      <a href="histDetails.html">Details</a>
+    </li>
+    <li class="divider"></li>
+    <li>
+      <a href="central_tendency.html">Central Tendency</a>
+    </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">More Visual Tools</li>
+    <li>
+      <a href="orderstats.html">Order Statistics</a>
+    </li>
+    <li class="divider"></li>
+    <li>
+      <a href="variability.html">Variability</a>
+    </li>
+    <li class="divider"></li>
+    <li>
+      <a href="correlation.html">Correlation</a>
+    </li>
+    <li class="divider"></li>
+    <li>
+      <a href="spurious.html">Spurious Correlations</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Correlation
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="gec.html">Graphical Exploration</a>
+    </li>
+    <li>
+      <a href="cm.html">Correlation Measurements</a>
+    </li>
+    <li>
+      <a href="lm.html">Linear Regression</a>
+    </li>
+    <li>
+      <a href="pre.html">Prediction</a>
+    </li>
+    <li>
+      <a href="fit.html">Model Fit Assessment</a>
+    </li>
+    <li>
+      <a href="leverage.html">Outliers: Assessment of Influence</a>
+    </li>
+  </ul>
+</li>
+<li>
+  <a href="rosling.html">Hans Rosling</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="https://github.com/AGG2016/Social-Data-Science">
+    <span class="fa fa-github"></span>
+     
+  </a>
+</li>
+<li>
+  <a href="https://co.linkedin.com/in/an%C3%ADbal-granada-gonz%C3%A1lez-86730a24">
+    <span class="fa fa-linkedin"></span>
+     
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">Histograms</h1>
+
+</div>
+
+
+<hr />
+<hr />
+<div id="the-keynesian-beauty-contest" class="section level3">
+<h3>The Keynesian beauty contest</h3>
+<hr />
+<p><span class="math inline">\(\quad\)</span>In chapter 12 of his General Theory of Employment (1936), John Maynard Keynes outlines the challenges of a systematic consideration of “rational behavior” in the context of markets. Basically, regarding investment decisions, Keynes considers the effect of assumptions about the rational behavior of other agents in the individual decisions: if you are considering the convenience of a venture, for instance, strictly “objective” criteria would not suffice, since the success of the project could be related, to a great extend, to the acceptance by a broad audience. Thus, Keynes describes a “third degree” of rational decision, based on a hypthotetical beauty contest in which the winner will select the most popular picture among a bunch of pictures of faces, a situation that “it is not a case of choosing those which, to the best of one’s judgment, are really the prettiest, nor even those which average opinion genuinely thinks the prettiest. We have reached the third degree where we devote our intelligences to anticipating what average opinion expects the average opinion to be” (Keynes, 1936, p. 156).</p>
+<p>Even before his work, this kind of consideration constitued a common topic in economics: what does “rationality” imply in the context of economic and social decisions? Is it just an assumption of the cientific models or also constitutes an observation regarding human behavior? What does the “symmetry of information” regarding the rationality of different agents imply?</p>
+<p>Later on the XX century, experimental economists and non-classical game theorists started to discuss alternative decision mechanisms more likely to conform to the behavior observed in humans: imitation, partial iteration, decisions related to previous experience. What would a rational agent do knowing that the results depend on decision of others, whose behavior is not “rational” in average?</p>
+<hr />
+<div id="real-data" class="section level4">
+<h4><strong>Real data</strong></h4>
+<p><span class="math inline">\(\quad\)</span>Over three academic periods, I have asked 138 students from the undergraduate studies of Political Science -PS- &amp; International Affairs -IA- to play the version of the “Keynesian beauty contest” developed by Nagel (1995): each of them will choose a number between 0 and 100 and the winner of some bonus points in the first project grade (maybe a not very attractive incentive has contaminated the sample?), will be the student whose strategy is closest to 2/3 of the class mean.</p>
+<p>Let’s explore the strategies played.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(beauty,<span class="kw">aes</span>(Strategy)) +
+<span class="st">        </span><span class="kw">geom_histogram</span>()</code></pre></div>
+<pre><code>## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</code></pre>
+<p><img src="ge_files/figure-html/plot0-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>From the technical point of view, it is important to recognize the basics of the ‘<em>ggplot grammar</em>’: <strong>a)</strong> the first parameter points out the source of data; <strong>b)</strong> parameters included within ‘aesthetics’ -aes-, will be “mapped”; <strong>c)</strong> a geometry is choosen for the composition of the information mapped.</p>
+<p>Most of the additional annotations will enhance the aesthetic features fo the graphs for improved readibility.</p>
+<p>Let’s make minimal adjustments to the basic graph above.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(beauty,<span class="kw">aes</span>(Strategy)) +
+<span class="st">        </span><span class="kw">geom_histogram</span>(<span class="dt">col=</span><span class="st">&quot;black&quot;</span>,<span class="dt">fill=</span><span class="st">&quot;tomato3&quot;</span>) +
+<span class="st">        </span><span class="kw">scale_x_continuous</span>(<span class="dt">breaks=</span><span class="kw">seq</span>(<span class="dv">0</span>,<span class="dv">100</span>,<span class="dv">10</span>)) +
+<span class="st">        </span><span class="kw">theme_bw</span>()</code></pre></div>
+<pre><code>## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</code></pre>
+<p><img src="ge_files/figure-html/plot0a-1.png" width="672" style="display: block; margin: auto;" /></p>
+<hr />
+</div>
+</div>
+<div id="construction-and-interpretation" class="section level3">
+<h3>Construction and Interpretation</h3>
+<hr />
+<div id="construction" class="section level4">
+<h4><strong>Construction</strong></h4>
+<p>“First, determine the frequency and relative frequency of each x value. Then mark possible x values on a horizontal scale. Above each value, draw a rectangle whose height is the relative frequency (or alternatively, the frequency) of that value” (Devore, p. 16).</p>
+<p>Usually, the “beauty contest” is played with only integers as valid strategies, so the game is discrete by definition; this, however, is not a must.</p>
+<p>The most important choice when building a histogram refers to the selection of the number of bars, bins or class intervals. Below, a less detail histogram allows more general conclusions.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(beauty,<span class="kw">aes</span>(Strategy)) +
+<span class="st">        </span><span class="kw">geom_histogram</span>(<span class="dt">col=</span><span class="st">&quot;black&quot;</span>,<span class="dt">fill=</span><span class="st">&quot;tomato3&quot;</span>,<span class="dt">binwidth =</span> <span class="dv">10</span>) +
+<span class="st">        </span><span class="kw">scale_x_continuous</span>(<span class="dt">breaks=</span><span class="kw">seq</span>(<span class="dv">0</span>,<span class="dv">100</span>,<span class="dv">10</span>)) +
+<span class="st">        </span><span class="kw">theme_bw</span>()</code></pre></div>
+<p><img src="ge_files/figure-html/plot0b-1.png" width="672" style="display: block; margin: auto;" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(<span class="dt">data=</span>beauty,<span class="kw">aes</span>(Strategy)) +
+<span class="st">  </span><span class="kw">geom_histogram</span>(<span class="kw">aes</span>(<span class="dt">y=</span><span class="dv">100</span>*(..count..)/<span class="kw">sum</span>(..count..)),
+                 <span class="dt">breaks=</span><span class="kw">seq</span>(<span class="dv">0</span>,<span class="dv">100</span>,<span class="dv">10</span>),<span class="dt">fill=</span><span class="st">&quot;blue&quot;</span>,
+                 <span class="dt">alpha=</span><span class="fl">0.5</span>,<span class="dt">col=</span><span class="st">&quot;blue&quot;</span>) +<span class="st"> </span>
+<span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">breaks=</span><span class="kw">seq</span>(<span class="dv">0</span>,<span class="dv">100</span>,<span class="dv">10</span>)) +
+<span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;Percentage&quot;</span>) +
+<span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;Strategies&quot;</span>) +
+<span class="st">  </span><span class="kw">theme_bw</span>()        </code></pre></div>
+<p><img src="ge_files/figure-html/plot2-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>In the example above, the histogram was forced to 10 rectangles by the parameter <em>breaks=seq(0,100,10)</em> (if this parameter is not set by the user, the package will assume a default); it is important to pick up on the fact that ‘binwidth’ applies to absolute counts, while a sequence defined for the parameter ‘breaks’ allows us to set the number of class intervals for relative frequencies -percentages-.</p>
+<p>The y-axis shows the relative frequency -in this case the percentage of students- who chose strategies contained in each of the intervals (absolute counts can be difficult to be interpreted and compared).</p>
+<ul>
+<li><strong>Thumb Rules</strong>: too many bands would make the interpretation of the graph unnecessarily difficult.
+<ul>
+<li>5 to 20</li>
+<li><span class="math inline">\(\sqrt{n}\)</span></li>
+</ul></li>
+</ul>
+<p><span class="math inline">\(\quad\)</span></p>
+</div>
+<div id="interpretation" class="section level4">
+<h4><strong>Interpretation</strong></h4>
+<ul>
+<li><p><strong>Representative Value</strong></p></li>
+<li><p>Dispersion</p></li>
+<li><p>Gaps</p></li>
+<li><p>Symmetry</p></li>
+<li><p>Peaks &amp; Valleys</p></li>
+<li><p>Outliers</p></li>
+</ul>
+<hr />
+<center>
+<img src="pics/PUJ%20-%20AGG%20Data%20Science.%20Symmetry.png" align="middle" style="width: 600px;"/>
+</center>
+<hr />
+</div>
+</div>
+<div id="continuous-and-categorical" class="section level3">
+<h3>Continuous and Categorical</h3>
+<hr />
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(beauty, <span class="kw">aes</span>(<span class="dt">x=</span>Strategy, <span class="dt">fill=</span>Program)) +
+<span class="st">        </span><span class="kw">geom_histogram</span>(<span class="dt">position=</span><span class="st">&quot;dodge&quot;</span>,<span class="dt">alpha=</span><span class="fl">0.8</span>,<span class="dt">binwidth =</span> <span class="dv">10</span>) +
+<span class="st">        </span><span class="kw">scale_fill_manual</span>(<span class="dt">values=</span><span class="kw">c</span>(<span class="st">&quot;#004660&quot;</span>,<span class="st">&quot;#00aeef&quot;</span>,<span class="st">&quot;#cccccc&quot;</span>)) +<span class="st"> </span>
+<span class="st">        </span><span class="kw">scale_x_continuous</span>(<span class="dt">breaks=</span><span class="kw">seq</span>(<span class="dv">0</span>,<span class="dv">100</span>,<span class="dv">10</span>)) +
+<span class="st">        </span><span class="kw">theme_bw</span>()</code></pre></div>
+<p><img src="ge_files/figure-html/plot1-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>In this example, it is important to notice that, in addition to the overall distribution of the strategies, the plot allows us to assess its relation with a categorical variable: <strong>Program</strong> (whose levels are Political Science -PS- and International Affairs -IA-).</p>
+<hr />
+</div>
+<div id="another-comparison" class="section level3">
+<h3>Another Comparison</h3>
+<hr />
+<p>Do the strategies selected by students in different cohorts differ?</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(beauty, <span class="kw">aes</span>(Strategy, <span class="dt">colour =</span> Period,<span class="dt">fill=</span>Period)) +
+<span class="st">  </span><span class="kw">geom_density</span>(<span class="dt">alpha=</span><span class="fl">0.75</span>,<span class="dt">col=</span><span class="st">&quot;black&quot;</span>) +
+<span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;Density&quot;</span>) +
+<span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;Strategies&quot;</span>) +
+<span class="st">  </span><span class="kw">theme_bw</span>()</code></pre></div>
+<p><img src="ge_files/figure-html/plot3-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><span class="math inline">\(\quad\)</span><strong>Histograms</strong> are probably the most basic tool for exploring the data distribution of a variable of interest; however, this basic approach is more insightful than usually recognized: with a clear sense of the <strong>central tendency</strong>, dispersion or <strong>variability</strong> and <strong>frequency</strong> of the variable in different ranges, it is possible to have an initial idea of the <strong>probability distribution</strong> of the phenomenom.</p>
+<p>In fact, a <strong>probability distribution</strong> can be thought of as a histogram for which measurements of the variable are available, for every possible value on a continuous scale; in other terms, a probability curve could be -as a mental exercise- derived from an <em>infinitesimallly detailed histogram</em>: the frequecy of the variable is determined for smaller and smaller ranges, the rectangles are more and more thin, so their tips start to ressemble a soft curve. More details in the section <a href="histDetails.html">‘Details’.</a><br></p>
+<hr />
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(ggthemes)
+<span class="kw">ggplot</span>(<span class="dt">data=</span>murders, <span class="kw">aes</span>(<span class="dt">x=</span>Orientation,<span class="dt">y=</span>GunMurders)) +
+<span class="st">  </span><span class="kw">geom_boxplot</span>(<span class="dt">colour=</span><span class="st">&quot;black&quot;</span>,<span class="dt">fill=</span><span class="st">&quot;plum&quot;</span>,<span class="dt">alpha=</span><span class="fl">0.8</span>) +
+<span class="st">  </span><span class="kw">coord_flip</span>() +
+<span class="st">  </span><span class="kw">theme_fivethirtyeight</span>() +
+<span class="st">  </span><span class="kw">scale_y_continuous</span>(<span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dv">0</span>,<span class="dv">1300</span>,<span class="dv">200</span>))</code></pre></div>
+<p><img src="ge_files/figure-html/plot23-1.png" width="672" style="display: block; margin: auto;" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(murders,<span class="kw">aes</span>(GunMurders,<span class="dt">color=</span>Orientation,
+                         <span class="dt">fill=</span>Orientation)) +
+<span class="st">  </span><span class="kw">geom_density</span>(<span class="dt">alpha=</span><span class="fl">0.85</span>,<span class="dt">col=</span><span class="st">&quot;black&quot;</span>,<span class="dt">size=</span><span class="fl">0.5</span>) +
+<span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dv">0</span>,<span class="dv">1300</span>,<span class="dv">200</span>))</code></pre></div>
+<p><img src="ge_files/figure-html/plot24-1.png" width="672" style="display: block; margin: auto;" /></p>
+<hr />
+</div>
+
+<!DOCTYPE html>
+<html>
+<body>
+<a href="mailto:anibalgranadagonzalez@gmail.com">Aníbal Granada González</a><br>This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a><br> 
+
+
+<a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png" /></a> <a href="https://tracedseals.starfieldtech.com/siteseal/certsealnew?cdSealType=Seal1&sealId=55e4ye7y7mb73272e786a9cbe99631dey7mb7355e4ye710ed5f2412c0e6333f8&referer=https://dcc.godaddy.com/dcc50/DropinLoad_Default.aspx?controlRequest=ActionCertifiedDomainsAuth&guid=41E0F16A-6A6A-1302-640C-B526B6EF4877"><img src="pics/seal.gif" alt="siteseal" style="width:132px;height:32px;border:0;">
+</a>
+<br />
+</body>
+</html>
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

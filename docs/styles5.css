@@ -1,0 +1,186 @@
+body {
+  
+  background-color:#fff;
+  
+  font-weight: normal;
+  font-size: 12pt;
+  color: #404040;
+}
+
+html, body, .footerPushDown {
+  height: 100%;
+}
+
+p {
+  line-height: 1.7em;
+  margin-bottom: 1em;
+}
+
+.band.full {
+  position: relative;
+}
+
+.band.full.first {
+  height: 550px;
+}
+
+.band.full.second {
+  height: 480px;
+
+  overflow: hidden;
+  border-bottom: 1px solid #f8f8f8;
+}
+
+.band.full.third {
+  height: 520px;
+}
+
+.bandContent, .standardPadding .articleBandContent {
+  margin: 0 auto;
+  max-width: 1140px;
+}
+
+.vCenter {
+  position: relative;
+  min-height: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.rightText .vCenter {
+  align-items: flex-end;
+}
+
+.band .imageOne {
+  position: absolute;
+  left: 0px;
+  bottom: -120px;
+  width: 630px;
+  height: auto;
+
+  z-index: 5;
+}
+
+.band .imageTwo {
+  position: absolute;
+  top: 10%;
+  right: 10px;
+  width: 45%;
+  height: auto;
+}
+
+.band .imageThree {
+  position: absolute;
+  left: 10px;
+  bottom: 0px;
+  width: 500px;
+  height: auto;
+
+  z-index: 5;
+}
+
+TWBSColor
+TWBSColor
+Generate your own Bootstrap navbar
+Select your Bootstrap version
+
+
+
+You would like a specific version? Ask me on Twitter!
+Select your colors
+
+Default background  Active background  Default color  Active color  
+Colorize dropdown  
+
+Bookmark your permalink
+
+https://work.smarchal.com/twbscolor/4.0.0-alpha.6/css/b65986ad6044efecf1ffdbe30
+Include Bootstrap assets
+
+//maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css
+//maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js
+Copy the generated SCSS/SASS/LESS/CSS
+
+SCSS
+SASS
+LESS
+CSS
+.navbar {
+  background-color: #b65986;
+}
+.navbar .navbar-brand {
+  color: #efecf1;
+}
+.navbar .navbar-brand:hover,
+.navbar .navbar-brand:focus {
+  color: #ffdbe3;
+}
+.navbar .navbar-text {
+  color: #efecf1;
+}
+.navbar .navbar-nav .nav-link {
+  color: #efecf1;
+  border-radius: .25rem;
+  margin: 0 0.25em;
+}
+.navbar .navbar-nav .nav-link:not(.disabled):hover,
+.navbar .navbar-nav .nav-link:not(.disabled):focus {
+  color: #ffdbe3;
+}
+.navbar .navbar-nav .nav-item.active .nav-link,
+.navbar .navbar-nav .nav-item.active .nav-link:hover,
+.navbar .navbar-nav .nav-item.active .nav-link:focus,
+.navbar .navbar-nav .nav-item.show .nav-link,
+.navbar .navbar-nav .nav-item.show .nav-link:hover,
+.navbar .navbar-nav .nav-item.show .nav-link:focus {
+  color: #ffdbe3;
+  background-color: #ad6044;
+}
+.navbar .navbar-toggle {
+  border-color: #ad6044;
+}
+.navbar .navbar-toggle:hover,
+.navbar .navbar-toggle:focus {
+  background-color: #ad6044;
+}
+.navbar .navbar-toggle .navbar-toggler-icon {
+  color: #efecf1;
+}
+.navbar .navbar-collapse,
+.navbar .navbar-form {
+  border-color: #efecf1;
+}
+.navbar .navbar-link {
+  color: #efecf1;
+}
+.navbar .navbar-link:hover {
+  color: #ffdbe3;
+}
+
+@media (max-width: 767px) {
+  .navbar .navbar-nav .open .dropdown-menu .dropdown-item {
+    color: #efecf1;
+  }
+  .navbar .navbar-nav .open .dropdown-menu .dropdown-item:hover,
+  .navbar .navbar-nav .open .dropdown-menu .dropdown-item:focus {
+    color: #ffdbe3;
+  }
+  .navbar .navbar-nav .open .dropdown-menu .dropdown-item.active {
+    color: #ffdbe3;
+    background-color: #ad6044;
+  }
+}
+Find TWBSColor useful ? Share it !
+
+Facebook Twitter Google+ Stumbleupon
+A work by Samuel Marchal
+Suggestions, comments, typo ?
+
+ Licence MIT 
+
+Buy me a coffee !  Buy me a tea ! 
+
+All brand icons are trademarks of their respective owners.
+The use of these trademarks does not indicate endorsement of the trademark holder by TWBSColor, nor vice versa.

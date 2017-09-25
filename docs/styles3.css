@@ -1,0 +1,98 @@
+body {
+  
+  background-color:#fff;
+  
+  font-weight: normal;
+  font-size: 12pt;
+  color: #404040;
+}
+
+html, body, .footerPushDown {
+  height: 100%;
+}
+
+p {
+  line-height: 1.7em;
+  margin-bottom: 1em;
+}
+
+.band.full {
+  position: relative;
+}
+
+.band.full.first {
+  height: 550px;
+}
+
+.band.full.second {
+  height: 480px;
+
+  overflow: hidden;
+  border-bottom: 1px solid #f8f8f8;
+}
+
+.band.full.third {
+  height: 520px;
+}
+
+.bandContent, .standardPadding .articleBandContent {
+  margin: 0 auto;
+  max-width: 1140px;
+}
+
+.vCenter {
+  position: relative;
+  min-height: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.rightText .vCenter {
+  align-items: flex-end;
+}
+
+.band .imageOne {
+  position: absolute;
+  left: 0px;
+  bottom: -120px;
+  width: 630px;
+  height: auto;
+
+  z-index: 5;
+}
+
+.band .imageTwo {
+  position: absolute;
+  top: 10%;
+  right: 10px;
+  width: 45%;
+  height: auto;
+}
+
+.band .imageThree {
+  position: absolute;
+  left: 10px;
+  bottom: 0px;
+  width: 500px;
+  height: auto;
+
+  z-index: 5;
+}
+
+ul.nav {
+   background-color: #00ff7f;       
+   border: 1px solid #999;
+   height: 20px; /*This is an example*/
+   margin: 0px auto;
+   width: 400px;        
+ }
+
+ ul.nav li {
+   background-color: #86182d; /*Example background color*/
+   display: block;
+   float: left;
+   height: 20px; /*This is an example*/
+   width: 80px;  /*This is 20% of 400px*/      
+ }
